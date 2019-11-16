@@ -54,3 +54,16 @@ proc fromTripletList*(triplets: seq[(int, int, float)]): SparseMatrix =
       result.ja.add(col)
       result.aa.add(val)
 
+
+proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
+  for row in rows:
+    let nnz_in_row = A.ia[row+1] - A.ia[row]
+    let lower = A.ia[row] - 1
+    let upper = A.ia[row] + nnz_in_row - 2
+    for idx in row+1..<A.ia.len:
+      A.ia[idx] -= nnz_in_row - 1
+    A.ja.delete(lower, upper)
+    A.aa.delete(lower, upper)
+
+    A.ja.insert(row, lower)
+    A.aa.insert(1.0, lower)

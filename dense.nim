@@ -74,11 +74,22 @@ proc `+`*(a, b: Matrix): Matrix =
     for j in 0 ..< a.cols:
       result[i, j] = a[i, j] + b[i, j]
 
+proc `+`*(a, b: Vector): Vector =
+  assert a.size == b.size
+  result = newVector(a.size)
+  for i in 0 ..< a.size:
+    result[i] = a[i] + b[i]
+
 proc `*`*(a: Matrix, b: float): Matrix =
   result = newMatrix(a.shape)
   for i in 0 ..< a.rows:
     for j in 0 ..< a.cols:
       result[i, j] = b * a[i, j]
+
+proc `*`*(a: float, b: Vector): Vector =
+  result = newVector(b.size)
+  for i in 0 ..< b.size:
+      result[i] = a * b[i]
 
 proc determinant*(a: Matrix): float =
   # currently only for 2x2
