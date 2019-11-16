@@ -1,3 +1,4 @@
+import math
 import strutils
 
 type Vector* = seq[float] ## A dynamic vector
@@ -49,6 +50,26 @@ proc transpose*(matrix: Matrix): Matrix =
     for j in 0 ..< result.cols:
       result[i, j] = matrix[j, i]
 
+proc `+`*(a, b: Matrix): Matrix =
+  assert a.cols == b.cols
+  assert a.rows == b.rows
+  result = newMatrix(a.rows, a.cols)
+  for i in 0 ..< a.rows:
+    for j in 0 ..< a.cols:
+      result[i, j] = a[i, j] + b[i, j]
+
+proc `+`*(a, b: Vector): Vector =
+  assert a.size == b.size
+  result = newVector(a.size)
+  for i in 0 ..< a.size:
+    result[i] = a[i] + b[i]
+
+proc `-`*(a, b: Vector): Vector =
+  assert a.size == b.size
+  result = newVector(a.size)
+  for i in 0 ..< a.size:
+    result[i] = a[i] - b[i]
+
 proc `*`*(A: Matrix, b: Vector): Vector =
   assert A.cols == b.size
   result = newVector(b.size)
@@ -66,20 +87,6 @@ proc `*`*(a, b: Matrix): Matrix =
         # would like to do this, but can't get it to compile
         # result[i, j] += a[i, k] * b[k, j]
 
-proc `+`*(a, b: Matrix): Matrix =
-  assert a.cols == b.cols
-  assert a.rows == b.rows
-  result = newMatrix(a.rows, a.cols)
-  for i in 0 ..< a.rows:
-    for j in 0 ..< a.cols:
-      result[i, j] = a[i, j] + b[i, j]
-
-proc `+`*(a, b: Vector): Vector =
-  assert a.size == b.size
-  result = newVector(a.size)
-  for i in 0 ..< a.size:
-    result[i] = a[i] + b[i]
-
 proc `*`*(a: Matrix, b: float): Matrix =
   result = newMatrix(a.shape)
   for i in 0 ..< a.rows:
@@ -95,3 +102,18 @@ proc determinant*(a: Matrix): float =
   # currently only for 2x2
   assert a.shape == (2, 2)
   result = a[0, 0] * a[1, 1] - a[0, 1] * a[1, 0]
+
+proc inv*(a: Matrix): Matrix =
+  # currently only for 2x2
+  assert a.shape == (2, 2)
+  result = @[@[ a[1, 1], -a[0, 1]],
+             @[-a[1, 0],  a[0, 0]]]
+  result = result * (1.0/determinant(a))
+
+proc dot*(a, b: Vector): float =
+  assert a.size == b.size
+  for i in 0..<a.size:
+    result += a[i] * b[i]
+
+proc norm*(a: Vector): float =
+  result = sqrt(dot(a, a))

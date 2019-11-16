@@ -5,7 +5,7 @@ import sparse
 import mesh
 import quadrature
 
-proc assembleMatrix*(f: proc(x: Vector): Matrix, mesh: Mesh): SparseMatrix =
+proc assembleMatrix*(f: proc(x: Vector, J: Matrix): Matrix, mesh: Mesh): SparseMatrix =
   var triplets = newSeq[(int, int, float)]()
   for elem in mesh.connectivity:
     var localNodes = newSeqOfCap[array[2, float]](3)
@@ -18,7 +18,7 @@ proc assembleMatrix*(f: proc(x: Vector): Matrix, mesh: Mesh): SparseMatrix =
 
   result = fromTripletList(triplets)
 
-proc assembleVector*(f: proc(x: Vector): Vector, mesh: Mesh): Vector =
+proc assembleVector*(f: proc(x: Vector, J: Matrix): Vector, mesh: Mesh): Vector =
   result = newVector(mesh.nodes.len)
   for elem in mesh.connectivity:
     var localNodes = newSeqOfCap[array[2, float]](3)

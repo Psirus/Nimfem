@@ -1,6 +1,7 @@
 import algorithm
 import sequtils
 import fenv
+import dense
 let eps = 2 * epsilon float
 
 type
@@ -67,3 +68,22 @@ proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
 
     A.ja.insert(row, lower)
     A.aa.insert(1.0, lower)
+
+proc `*`*(A: SparseMatrix, b: Vector): Vector =
+  result = newVector(b.size)
+  for i in 0..<A.ia.len-1:
+    for idx in A.ia[i]-1..<A.ia[i+1]-1:
+      let col = A.ja[idx]
+      result[i] += A.aa[idx] * b[col]
+
+proc toDense*(A: SparseMatrix): Matrix =
+  let rows = A.ia.len - 1
+  result = newMatrix(rows, rows)
+  for i in 0..<rows:
+    for idx in A.ia[i]-1..<A.ia[i+1]-1:
+      let j = A.ja[idx]
+      result[i, j] = A.aa[idx]
+    
+proc `$`*(A: SparseMatrix): string =
+  let A_dense = toDense(A)
+  result = $A_dense

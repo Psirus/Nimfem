@@ -14,6 +14,9 @@ block:
   doAssert m.ja == @[0, 3, 0, 1, 3, 2, 2, 3, 4]
   doAssert m.aa == @[1.0, 2.0, 3.0, 4.0, 5.0, 1.0, 10.0, 11.0, 12.0]
 
+  var b = m * @[1.0, 2.0, 3.0, 4.0, 5.0]
+  doAssert b == @[9.0, 31.0, 3.0, 74.0, 60.0]
+
 block:
   let triplets = @[(0, 3, 3.0), (2, 5, 7.0), (0, 2, 1.0), (2, 7, 1.0), (0, 7, 5.0)]
   let m = fromTripletList(triplets)
