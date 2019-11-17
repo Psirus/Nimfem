@@ -17,8 +17,7 @@ proc mySource(x: Vector, J: Matrix): Vector =
 proc bc(x: Vector): float =
   result = 1.0 + x[0]*x[0] + 2.0*x[1]*x[1]
 
-let my_mesh = UnitSquareMesh(700)
-echo my_mesh.connectivity.len
+let my_mesh = UnitSquareMesh(50)
 
 var A = assembleMatrix(myF, my_mesh)
 var f = assembleVector(mySource, my_mesh)
@@ -30,5 +29,4 @@ var u = conjugate_gradient(A, f)
 
 writeVTK(my_mesh, u)
 
-echo "Number nonzeros: ", A.aa.len
-echo "Number elements: ", my_mesh.connectivity.len
+echo "Number of elements: ", my_mesh.connectivity.len
