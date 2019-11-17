@@ -17,7 +17,8 @@ proc mySource(x: Vector, J: Matrix): Vector =
 proc bc(x: Vector): float =
   result = 1.0 + x[0]*x[0] + 2.0*x[1]*x[1]
 
-let my_mesh = UnitSquareMesh(100)
+let my_mesh = UnitSquareMesh(700)
+echo my_mesh.connectivity.len
 
 var A = assembleMatrix(myF, my_mesh)
 var f = assembleVector(mySource, my_mesh)

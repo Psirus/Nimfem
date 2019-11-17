@@ -16,4 +16,4 @@ proc conjugate_gradient*(A: SparseMatrix, b: Vector): Vector =
     let beta = dot(R, R) / scale
     P = R + beta * P
     m += 1
-    echo "res = ", norm(R)
+    # echo "res = ", norm(R)

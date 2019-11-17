@@ -1,6 +1,6 @@
 from dolfin import *
 
-mesh = UnitSquareMesh(2, 2)
+mesh = UnitSquareMesh(700, 700)
 V = FunctionSpace(mesh, "P", 1)
 u = TrialFunction(V)
 v = TestFunction(V)
@@ -17,15 +17,12 @@ def boundary(x, on_boundary):
 bc = DirichletBC(V, u_D, boundary)
 
 A = assemble(a)
-rhs = assemble(L)
-print(A.array())
-print(rhs.get_local())
 # Compute solution
-u = Function(V)
-solve(a == L, u, bc)
-
-# A = assemble(a)
-vtkfile = File('fenics_output.pvd')
-vtkfile << u
-
+#u = Function(V)
+#solve(a == L, u, bc)
+#
+## A = assemble(a)
+#vtkfile = File('fenics_output.pvd')
+#vtkfile << u
+#
 print(mesh.num_cells())

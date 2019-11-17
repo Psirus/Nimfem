@@ -6,7 +6,10 @@ import mesh
 import quadrature
 
 proc assembleMatrix*(f: proc(x: Vector, J: Matrix): Matrix, mesh: Mesh): SparseMatrix =
-  var triplets = newSeq[(int, int, float)]()
+  let num_nodes = mesh.nodes.len
+  var Ai = newSeqOfCap[int](15*num_nodes)
+  var Aj = newSeqOfCap[int](15*num_nodes)
+  var Ax = newSeqOfCap[float](15*num_nodes)
   for elem in mesh.connectivity:
     var localNodes = newSeqOfCap[array[2, float]](3)
     for dof in elem:
@@ -14,9 +17,11 @@ proc assembleMatrix*(f: proc(x: Vector, J: Matrix): Matrix, mesh: Mesh): SparseM
     let elem_matrix = triangleSecondOrderQuadrature(f, localNodes)
     for i, dof_i in elem.pairs:
       for j, dof_j in elem.pairs:
-        triplets.add((dof_i, dof_j, elem_matrix[i, j]))
+        Ai.add(dof_i)
+        Aj.add(dof_j)
+        Ax.add(elem_matrix[i, j])
 
-  result = fromTripletList(triplets)
+  result = toCSR(Ai, Aj, Ax)
 
 proc assembleVector*(f: proc(x: Vector, J: Matrix): Vector, mesh: Mesh): Vector =
   result = newVector(mesh.nodes.len)
