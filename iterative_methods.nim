@@ -1,11 +1,10 @@
-import dense
 import sparse
 
-proc conjugate_gradient*(A: SparseMatrix, b: Vector): Vector =
+proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
   result = b
   var R = b - A * result
   var P = R
-  var m = 0 
+  var m = 0
   let tol = 1e-9
   while norm(R) > tol:
     let Ap = A * P

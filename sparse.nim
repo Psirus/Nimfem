@@ -1,7 +1,7 @@
+import math
 import algorithm
 import sequtils
 import fenv
-import dense
 let eps = 2 * epsilon float
 
 type
@@ -9,6 +9,39 @@ type
     ia*: seq[int]
     ja*: seq[int]
     aa*: seq[float]
+
+  DynamicVector* = seq[float]
+
+proc newVector*(size: int): DynamicVector =
+  result = newSeq[float](size)
+
+proc size*(vector: DynamicVector): int =
+  result = vector.len
+
+proc `+`*(a, b: DynamicVector): DynamicVector =
+  assert a.size == b.size
+  result = newVector(a.size)
+  for i in 0 ..< a.size:
+    result[i] = a[i] + b[i]
+
+proc `*`*(a: float, b: DynamicVector): DynamicVector =
+  result = newVector(b.size)
+  for i in 0 ..< b.size:
+    result[i] = a * b[i]
+
+proc `-`*(a, b: DynamicVector): DynamicVector =
+  assert a.size == b.size
+  result = newVector(a.size)
+  for i in 0 ..< a.size:
+    result[i] = a[i] - b[i]
+
+proc dot*(a, b: DynamicVector): float =
+  assert a.size == b.size
+  for i in 0 ..< a.size:
+    result += a[i] * b[i]
+
+proc norm*(a: DynamicVector): float =
+  result = sqrt(dot(a, a))
 
 proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
   for row in rows:
@@ -23,25 +56,25 @@ proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
     A.ja.insert(row, lower)
     A.aa.insert(1.0, lower)
 
-proc `*`*(A: SparseMatrix, b: Vector): Vector =
+proc `*`*(A: SparseMatrix, b: DynamicVector): DynamicVector =
   result = newVector(b.size)
   for i in 0..<A.ia.len-1:
     for idx in A.ia[i]..<A.ia[i+1]:
       let col = A.ja[idx]
       result[i] += A.aa[idx] * b[col]
 
-proc toDense*(A: SparseMatrix): Matrix =
-  let rows = A.ia.len - 1
-  let cols = max(A.ja) + 1
-  result = newMatrix(rows, cols)
-  for i in 0..<rows:
-    for idx in A.ia[i]..<A.ia[i+1]:
-      let j = A.ja[idx]
-      result[i, j] = A.aa[idx]
-    
-proc `$`*(A: SparseMatrix): string =
-  let A_dense = toDense(A)
-  result = $A_dense
+#proc toDense*(A: SparseMatrix): Matrix =
+#  let rows = A.ia.len - 1
+#  let cols = max(A.ja) + 1
+#  result: array[rows, array[cols, int]]
+#  for i in 0..<rows:
+#    for idx in A.ia[i]..<A.ia[i+1]:
+#      let j = A.ja[idx]
+#      result[i, j] = A.aa[idx]
+#
+#proc `$`*(A: SparseMatrix): string =
+#  let A_dense = toDense(A)
+#  result = $A_dense
 
 proc removeZeros(A: var SparseMatrix) =
   var row_end = 0

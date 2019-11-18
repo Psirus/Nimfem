@@ -1,9 +1,9 @@
 import strformat
 
 import mesh
-import dense
+import sparse
 
-proc writeVTK*(mesh: Mesh, u: Vector) =
+proc writeVTK*(mesh: Mesh, u: DynamicVector) =
   var vtkFile = open("output.vtk", FileMode.fmWrite)
   # Header
   vtkFile.write("# vtk DataFile Version 1.0\n")
@@ -27,7 +27,7 @@ proc writeVTK*(mesh: Mesh, u: Vector) =
   vtkFile.write("CELL_TYPES {num_cells}\n".fmt)
   for _ in 0..<num_cells:
     vtkFile.write("5\n")
-  
+
   # data
   vtkFile.write("POINT_DATA {num_nodes}\n".fmt)
   vtkFile.write("SCALARS u float\n")

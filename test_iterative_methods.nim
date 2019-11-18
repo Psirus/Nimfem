@@ -1,13 +1,12 @@
 import sequtils
 import fenv
 
-import dense
 import sparse
 import iterative_methods
 
 let eps = 2 * epsilon float
 
-proc allClose(a, b: Vector): bool =
+proc allClose(a, b: DynamicVector): bool =
   var tmp = newVector(a.size)
   for i in 0..<a.size:
     tmp[i] = abs(a[i] - b[i])
@@ -15,7 +14,7 @@ proc allClose(a, b: Vector): bool =
 
 block:
   var A: SparseMatrix
-  A.ia = @[1, 3, 5]
+  A.ia = @[0, 2, 4]
   A.ja = @[0, 1, 0, 1]
   A.aa = @[4.0, 1.0, 1.0, 3.0]
 
@@ -25,7 +24,7 @@ block:
 
 block:
   var A: SparseMatrix
-  A.ia = @[1, 2, 3, 4, 5]
+  A.ia = @[0, 1, 2, 3, 4]
   A.ja = @[0, 1, 2, 3]
   A.aa = @[1.0, 2.0, 3.0, 4.0]
 

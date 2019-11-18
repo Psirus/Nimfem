@@ -6,15 +6,15 @@ import sparse
 import iterative_methods
 import io
 
-proc myF(x: Vector, J: Matrix): Matrix =
+proc myF(x: Vector[2], J: Matrix[2, 2]): Matrix[3, 3] =
   let B = inv(J) * derivativeShapeFunctions()
   result = B.transpose * B
 
-proc mySource(x: Vector, J: Matrix): Vector =
+proc mySource(x: Vector[2], J: Matrix[2, 2]): Vector[3] =
   let N = shapeFunctions(x)
   result = - 6.0 * N
 
-proc bc(x: Vector): float =
+proc bc(x: Vector[2]): float =
   result = 1.0 + x[0]*x[0] + 2.0*x[1]*x[1]
 
 let my_mesh = UnitSquareMesh(50)

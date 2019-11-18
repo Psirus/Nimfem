@@ -1,20 +1,19 @@
-import sequtils
-
 import dense
 import sparse
 import mesh
 import quadrature
 
-proc assembleMatrix*(f: proc(x: Vector, J: Matrix): Matrix, mesh: Mesh): SparseMatrix =
+proc assembleMatrix*[M, N, D](f: proc(x: Vector[D], J: Matrix[D, D]):
+    Matrix[M, N], mesh: Mesh): SparseMatrix =
   let num_nodes = mesh.nodes.len
   var Ai = newSeqOfCap[int](15*num_nodes)
   var Aj = newSeqOfCap[int](15*num_nodes)
   var Ax = newSeqOfCap[float](15*num_nodes)
   for elem in mesh.connectivity:
-    var localNodes = newSeqOfCap[array[2, float]](3)
-    for dof in elem:
-      localNodes.add(mesh.nodes[dof])
-    let elem_matrix = triangleSecondOrderQuadrature(f, localNodes)
+    var localNodes: array[3, array[2, float]]
+    for i, dof in elem.pairs:
+      localNodes[i] = mesh.nodes[dof]
+    let elem_matrix = triSecondOrderQuadrature(f, localNodes)
     for i, dof_i in elem.pairs:
       for j, dof_j in elem.pairs:
         Ai.add(dof_i)
@@ -23,17 +22,18 @@ proc assembleMatrix*(f: proc(x: Vector, J: Matrix): Matrix, mesh: Mesh): SparseM
 
   result = toCSR(Ai, Aj, Ax)
 
-proc assembleVector*(f: proc(x: Vector, J: Matrix): Vector, mesh: Mesh): Vector =
+proc assembleVector*[N, D](f: proc(x: Vector[D], J: Matrix[D, D]): Vector[N],
+    mesh: Mesh): DynamicVector =
   result = newVector(mesh.nodes.len)
   for elem in mesh.connectivity:
-    var localNodes = newSeqOfCap[array[2, float]](3)
-    for dof in elem:
-      localNodes.add(mesh.nodes[dof])
-    let elem_vec = triangleSecondOrderQuadratureVector(f, localNodes)
+    var localNodes: array[N, array[D, float]]
+    for i, dof in elem.pairs:
+      localNodes[i] = mesh.nodes[dof]
+    let elem_vec = triSecondOrderQuadratureVec(f, localNodes)
     for i, dof_i in elem.pairs:
       result[dof_i] += elem_vec[i]
 
-proc applyBC*(f: var Vector, mesh: Mesh, bc: proc(x: Vector): float) =
+proc applyBC*(f: var DynamicVector, mesh: Mesh, bc: proc(x: Vector[2]): float) =
   for node in mesh.boundary_nodes:
-    let coordinates = toSeq(mesh.nodes[node])
+    let coordinates = mesh.nodes[node]
     f[node] = bc(coordinates)

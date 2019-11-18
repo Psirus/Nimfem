@@ -2,7 +2,7 @@ import math
 
 type
   Mesh* = object
-    nodes*:  seq[array[2, float]] # not sure wether I should hardcode 2 or 3 here
+    nodes*: seq[array[2, float]]
     connectivity*: seq[array[3, int]]
     boundary_nodes*: seq[int]
 
