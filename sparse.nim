@@ -48,13 +48,11 @@ proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
     let nnz_in_row = A.ia[row+1] - A.ia[row]
     let lower = A.ia[row]
     let upper = A.ia[row] + nnz_in_row - 1
-    for idx in row+1..<A.ia.len:
-      A.ia[idx] -= nnz_in_row - 1
-    A.ja.delete(lower, upper)
-    A.aa.delete(lower, upper)
-
-    A.ja.insert(row, lower)
-    A.aa.insert(1.0, lower)
+    for idx in lower .. upper:
+      if row == A.ja[idx]:
+        A.aa[idx] = 1.0
+      else:
+        A.aa[idx] = 0.0
 
 proc `*`*(A: SparseMatrix, b: DynamicVector): DynamicVector =
   result = newVector(b.size)
