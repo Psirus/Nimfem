@@ -1,6 +1,7 @@
 import math
 import algorithm
 import sequtils
+import strutils
 import fenv
 let eps = 2 * epsilon float
 
@@ -61,18 +62,38 @@ proc `*`*(A: SparseMatrix, b: DynamicVector): DynamicVector =
       let col = A.ja[idx]
       result[i] += A.aa[idx] * b[col]
 
-#proc toDense*(A: SparseMatrix): Matrix =
-#  let rows = A.ia.len - 1
-#  let cols = max(A.ja) + 1
-#  result: array[rows, array[cols, int]]
-#  for i in 0..<rows:
-#    for idx in A.ia[i]..<A.ia[i+1]:
-#      let j = A.ja[idx]
-#      result[i, j] = A.aa[idx]
-#
-#proc `$`*(A: SparseMatrix): string =
-#  let A_dense = toDense(A)
-#  result = $A_dense
+proc rows*(A: SparseMatrix): int =
+  result = A.ia.len - 1
+
+proc cols*(A: SparseMatrix): int =
+  result = A.ja.max + 1
+
+proc `$`*(A: SparseMatrix): string =
+  result = "["
+  for i in 0 ..< A.rows:
+    result.add("[")
+    for j in 0 ..< A.cols:
+      result.add("0.0, ")
+      for idx in countup(A.ia[i], A.ia[i+1]-1):
+        let col_idx = A.ja[idx]
+        if j == col_idx:
+          result.delete(result.high - 4, result.high)
+          result.add($A.aa[idx] & ", ")
+    result.removeSuffix({',', ' '})
+    result.add("]\n ")
+  result.removeSuffix({'\n', ' '})
+  result.add("]")
+
+proc getEntry*(A: SparseMatrix, i, j: int): float =
+  result = NaN
+  for idx in countup(A.ia[i], A.ia[i+1] - 1):
+    if j == A.ja[idx]:
+      return A.aa[idx]
+
+proc setEntry*(A: var SparseMatrix, i, j: int, val: float) =
+  for idx in countup(A.ia[i], A.ia[i+1] - 1):
+    if j == A.ja[idx]:
+      A.aa[idx] = val
 
 proc removeZeros(A: var SparseMatrix) =
   var row_end = 0

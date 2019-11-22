@@ -23,11 +23,20 @@ block:
   doAssert allClose(u, @[1.0/11.0, 7.0/11.0])
 
 block:
-  var A: SparseMatrix
-  A.ia = @[0, 1, 2, 3, 4]
-  A.ja = @[0, 1, 2, 3]
-  A.aa = @[1.0, 2.0, 3.0, 4.0]
+  let Ai = @[0, 1, 2, 3]
+  let Aj = @[0, 1, 2, 3]
+  let Ax = @[1.0, 2.0, 3.0, 4.0]
+  let A = toCSR(Ai, Aj, Ax)
 
   var b = @[1.0, 1.0, 1.0, 1.0]
   let u = conjugate_gradient(A, b)
   doAssert allClose(u, @[1.0, 0.5, 1.0/3.0, 0.25])
+
+block:
+  let Ai = @[0, 1, 2, 3, 0, 1, 2, 2]
+  let Aj = @[0, 1, 2, 3, 2, 0, 0, 1]
+  let Ax = @[1.0, 2.0, 3.0, 4.0, 4.0, 1.0, 1.0, 2.0]
+  let A = toCSR(Ai, Aj, Ax)
+
+  echo A
+  echo incomplete_lu(A)

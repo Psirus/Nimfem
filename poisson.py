@@ -9,9 +9,6 @@ a = dot(grad(v), grad(u)) * dx
 f = Constant(-6.0)
 L = f * v * dx
 
-A = assemble(a)
-sys.exit(0)
-
 # Define boundary condition
 u_D = Expression("1 + x[0]*x[0] + 2*x[1]*x[1]", degree=2)
 
