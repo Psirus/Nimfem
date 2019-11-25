@@ -81,3 +81,6 @@ proc inv*(a: Matrix[2, 2]): Matrix[2, 2] =
   result = [[a[1, 1], -a[0, 1]],
             [-a[1, 0], a[0, 0]]]
   result = result * (1.0/determinant(a))
+
+let m = [[1.0, 0.0], [0.0, 2.0]]
+echo m
