@@ -1,15 +1,16 @@
 import strutils
-import sparse
 import math
+
+import ../sparse
 
 block:
   let Ai = @[0, 0, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4]
   let Aj = @[0, 3, 0, 1, 3, 0, 2, 3, 4, 2, 3, 4]
   let Ax = @[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
   var m = toCSR(Ai, Aj, Ax)
-#  doAssert m.ia == @[0, 2, 5, 9, 11, 12]
-#  doAssert m.ja == @[0, 3, 0, 1, 3, 0, 2, 3, 4, 2, 3, 4]
-#  doAssert m.aa == @[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
+  doAssert m.ia == @[0, 2, 5, 9, 11, 12]
+  doAssert m.ja == @[0, 3, 0, 1, 3, 0, 2, 3, 4, 2, 3, 4]
+  doAssert m.aa == @[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 
   echo m
 

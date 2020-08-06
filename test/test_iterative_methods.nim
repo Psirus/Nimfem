@@ -1,8 +1,8 @@
 import sequtils
 import fenv
 
-import sparse
-import iterative_methods
+import ../sparse
+import ../iterative_methods
 
 let eps = 2 * epsilon float
 
@@ -38,5 +38,7 @@ block:
   let Ax = @[1.0, 2.0, 3.0, 4.0, 4.0, 1.0, 1.0, 2.0]
   let A = toCSR(Ai, Aj, Ax)
 
-  echo A
-  echo incomplete_lu(A)
+  let ILUx = @[1.0, 2.0, -1.0, 4.0, 4.0, 1.0, 1.0, 1.0]
+  let ILU = toCSR(Ai, Aj, ILUx)
+
+  doAssert incomplete_lu(A) == ILU
