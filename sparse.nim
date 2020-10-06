@@ -111,8 +111,9 @@ proc removeZeros(A: var SparseMatrix) =
       jj += 1
     A.ia[i+1] = nnz
 
-  A.ja.delete(nnz, A.ja.high)
-  A.aa.delete(nnz, A.aa.high)
+  if A.ja.high > nnz:
+    A.ja.delete(nnz, A.ja.high)
+    A.aa.delete(nnz, A.aa.high)
 
 proc sortCols(A: var SparseMatrix) =
   for i in 0..<A.ia.high:
@@ -147,8 +148,9 @@ proc sumDuplicates(A: var SparseMatrix) =
       nnz += 1
     A.ia[i+1] = nnz
 
-  A.ja.delete(nnz, A.ja.high)
-  A.aa.delete(nnz, A.aa.high)
+  if A.ja.high > nnz:
+    A.ja.delete(nnz, A.ja.high)
+    A.aa.delete(nnz, A.aa.high)
 
 proc cumSum(xs: var seq[int]) =
   for i in 1..<xs.len:

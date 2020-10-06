@@ -1,3 +1,4 @@
+import math
 import sparse
 
 proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
@@ -17,17 +18,26 @@ proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
     m += 1
     # echo "res = ", norm(R)
 
+proc isNan(x: float): bool =
+  result = classify(x) == fcNan
+
 proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
   result = A
   for i in 1 ..< A.rows:
     for k in 0 ..< i:
       let entry = A.getEntry(i, k)
-      if bool(entry):
+      if not isNan(entry):
         let e = entry / A.getEntry(k, k)
         result.setEntry(i, k, e)
         for j in k+1 .. A.rows:
           let A_ij = A.getEntry(i, j)
           let A_kj = A.getEntry(k, j)
-          if bool(A_ij) and bool(A_kj):
+          if (not isNan(A_ij)) and (not isNan(A_kj)):
             let A_ik = A.getEntry(i, k)
             result.setEntry(i, j, A_ij - A_ik * A_kj)
+
+proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
+  result = b
+  # forward substitution
+
+  # backward substitution
