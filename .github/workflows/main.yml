@@ -1,0 +1,21 @@
+name: run_tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest nim
+        run: |
+            curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y
+            echo "/home/runner/.nimble/bin" >> $GITHUB_PATH
+
+      - name: Run tests
+        run: nim test
