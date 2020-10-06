@@ -1,4 +1,4 @@
-.. image:: https://github.com/Psirus/Nimfem/workflows/.github/workflows/main.yml/badge.svg
+.. image:: https://github.com/Psirus/Nimfem/workflows/Tests/badge.svg
 
 A finite element library in Nim.
 
