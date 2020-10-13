@@ -95,6 +95,9 @@ proc setEntry*(A: var SparseMatrix, i, j: int, val: float) =
     if j == A.ja[idx]:
       A.aa[idx] = val
 
+proc nonzero_bounds_row*(A: SparseMatrix, row: int): (int, int) =
+   result = (A.ia[row], A.ia[row+1] - 1)
+
 proc removeZeros(A: var SparseMatrix) =
   var row_end = 0
   var nnz = 0

@@ -42,3 +42,37 @@ block:
   let ILU = toCSR(Ai, Aj, ILUx)
 
   doAssert incomplete_lu(A) == ILU
+
+block:
+  let Ai = @[0, 1, 2, 3, 0, 1, 2, 2]
+  let Aj = @[0, 1, 2, 3, 2, 0, 0, 1]
+  let Ax = @[1.0, 2.0, 3.0, 4.0, 4.0, 1.0, 1.0, 2.0]
+  let A = toCSR(Ai, Aj, Ax)
+
+  let b = @[1.0, 2.0, 3.0, 4.0]
+  let P = incomplete_lu(A)
+  let x = solve_ilu(P, b)
+
+  doAssert allClose(x, @[5.0, 0.5, -1.0, 1.0])
+
+block:
+  var A: SparseMatrix
+  A.ia = @[0, 2, 4]
+  A.ja = @[0, 1, 0, 1]
+  A.aa = @[4.0, 1.0, 1.0, 3.0]
+
+  let b = @[1.0, 2.0]
+  let P = incomplete_lu(A)
+  let u = preconditioned_cg(A, P, b)
+  doAssert allClose(u, @[1.0/11.0, 7.0/11.0])
+
+block:
+  let Ai = @[0, 1, 2, 3]
+  let Aj = @[0, 1, 2, 3]
+  let Ax = @[1.0, 2.0, 3.0, 4.0]
+  let A = toCSR(Ai, Aj, Ax)
+
+  var b = @[1.0, 1.0, 1.0, 1.0]
+  let P = incomplete_lu(A)
+  let u = preconditioned_cg(A, P, b)
+  doAssert allClose(u, @[1.0, 0.5, 1.0/3.0, 0.25])
