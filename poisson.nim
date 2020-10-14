@@ -5,7 +5,6 @@ import assembly
 import sparse
 import iterative_methods
 import io
-import times
 
 proc myF(x: Vector[2], J: Matrix[2, 2]): Matrix[3, 3] =
   let B = inv(J) * derivativeShapeFunctions()
@@ -26,17 +25,8 @@ var f = assembleVector(mySource, my_mesh)
 setDiagonalRows(A, my_mesh.boundary_nodes)
 applyBC(f, my_mesh, bc)
 
-var before = cpuTime()
-var u = conjugate_gradient(A, f)
-echo "CG time:", cpuTime() - before
-
-before = cpuTime()
 var P = incomplete_lu(A)
-echo "ILU time:", cpuTime() - before
-
-before = cpuTime()
-var u2 = preconditioned_cg(A, P, f)
-echo "PCG time:", cpuTime() - before
+var u = preconditioned_cg(A, P, f)
 
 writeVTK(my_mesh, u)
 

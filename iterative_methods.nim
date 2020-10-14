@@ -1,4 +1,3 @@
-import math
 import sparse
 
 proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
@@ -19,24 +18,24 @@ proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
     # echo "res = ", norm(R)
   # echo m
 
-proc isNan(x: float): bool =
-  result = classify(x) == fcNan
-
-# Saad
+# Saad, Algorithm 10.3
 proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
   result = A
-  for k in 0 ..< A.rows-1:
-    let d = 1.0 / result.getEntry(k,k)
-    for i in (k+1) ..< A.rows:
-      let entry = result.getEntry(i, k)
-      if not isNan(entry):
-        let e = d * entry
-        result.setEntry(i, k, e)
-        for j in (k+1) ..< A.rows:
-          let A_ij = result.getEntry(i, j)
-          let A_kj = result.getEntry(k, j)
-          if (not isNan(A_ij)) and (not isNan(A_kj)):
-            result.setEntry(i, j, A_ij - e * A_kj)
+  for i in 1 ..< A.rows:
+    let nz_bounds = result.nonzero_bounds_row(i)
+    for k_idx in nz_bounds[0] .. nz_bounds[1]:
+      let k = result.ja[k_idx]
+      if k >= i:
+        break
+      let e = result.aa[k_idx] / result.getEntry(k, k)
+      result.aa[k_idx] = e
+      for j_idx in nz_bounds[0] .. nz_bounds[1]:
+        let j = result.ja[j_idx]
+        if j < (k+1):
+          continue
+        let kj_idx = result.getIndex(k, j)
+        if kj_idx != -1:
+          result.aa[j_idx] -= e * result.aa[kj_idx]
 
 proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
   assert b.len == P.cols, "Preconditioner and RHS vector don't match in size."
