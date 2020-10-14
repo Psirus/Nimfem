@@ -1,0 +1,7 @@
+fenics_output.pvd
+fenics_output000000.vtu
+iterative_methods
+output.vtk
+poisson
+test/test_*
+!test/test_*.nim

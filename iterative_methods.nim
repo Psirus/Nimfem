@@ -16,43 +16,27 @@ proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
     let beta = dot(R, R) / scale
     P = R + beta * P
     m += 1
-    echo "res = ", norm(R)
-  echo m
+    # echo "res = ", norm(R)
+  # echo m
 
 proc isNan(x: float): bool =
   result = classify(x) == fcNan
 
-# Ern & Guermond
+# Saad
 proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
   result = A
-  for i in 0 ..< A.rows:
-    for k in 0 ..< i:
-      let entry = A.getEntry(i, k)
-      if not isNan(entry):
-        let e = entry / A.getEntry(k, k)
-        result.setEntry(i, k, e)
-        for j in k+1 .. A.rows:
-          let A_ij = A.getEntry(i, j)
-          let A_kj = A.getEntry(k, j)
-          if (not isNan(A_ij)) and (not isNan(A_kj)):
-            let A_ik = A.getEntry(i, k)
-            result.setEntry(i, j, A_ij - A_ik * A_kj)
-
-# CFD Online
-proc incomplete_lu2*(A: SparseMatrix): SparseMatrix =
-  result = A
-  for r in 0 ..< A.rows-1:
-    let d = 1.0 / A.getEntry(r, r)
-    for i in (r+1) ..< A.rows:
-      let entry = A.getEntry(i, r)
+  for k in 0 ..< A.rows-1:
+    let d = 1.0 / result.getEntry(k,k)
+    for i in (k+1) ..< A.rows:
+      let entry = result.getEntry(i, k)
       if not isNan(entry):
         let e = d * entry
-        result.setEntry(i, r, e)
-        for j in r+1 ..< A.rows:
-          let A_ij = A.getEntry(i, j)
-          let A_rj = A.getEntry(r, j)
-          if (not isNan(A_ij)) and (not isNan(A_rj)):
-            result.setEntry(i, j, A_ij - e * A_rj)
+        result.setEntry(i, k, e)
+        for j in (k+1) ..< A.rows:
+          let A_ij = result.getEntry(i, j)
+          let A_kj = result.getEntry(k, j)
+          if (not isNan(A_ij)) and (not isNan(A_kj)):
+            result.setEntry(i, j, A_ij - e * A_kj)
 
 proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
   assert b.len == P.cols, "Preconditioner and RHS vector don't match in size."
@@ -96,6 +80,5 @@ proc preconditioned_cg*(A: SparseMatrix, C: SparseMatrix, b: DynamicVector): Dyn
     let beta = dot(z, R) / zR
     P = z + beta * P
     m += 1
-    echo "res = ", norm(R)
-
-  echo m
+    # echo "res = ", norm(R)
+  # echo m
