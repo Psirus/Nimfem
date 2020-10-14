@@ -1,3 +1,6 @@
+import os
+import strutils
+
 import mesh
 import triangle
 import dense
@@ -17,7 +20,8 @@ proc mySource(x: Vector[2], J: Matrix[2, 2]): Vector[3] =
 proc bc(x: Vector[2]): float =
   result = 1.0 + x[0]*x[0] + 2.0*x[1]*x[1]
 
-let my_mesh = UnitSquareMesh(50)
+let num_elements_per_side = parseInt(commandLineParams()[0])
+let my_mesh = UnitSquareMesh(num_elements_per_side)
 
 var A = assembleMatrix(myF, my_mesh)
 var f = assembleVector(mySource, my_mesh)

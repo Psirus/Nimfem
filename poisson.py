@@ -1,7 +1,9 @@
 import sys
 from dolfin import *
 
-mesh = UnitSquareMesh(50, 50)
+num_elements_per_side = int(sys.argv[1])
+
+mesh = UnitSquareMesh(num_elements_per_side, num_elements_per_side)
 V = FunctionSpace(mesh, "P", 1)
 u = TrialFunction(V)
 v = TestFunction(V)

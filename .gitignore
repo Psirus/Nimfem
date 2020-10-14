@@ -5,3 +5,4 @@ output.vtk
 poisson
 test/test_*
 !test/test_*.nim
+timings/
