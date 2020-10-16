@@ -90,10 +90,14 @@ proc getEntry*(A: SparseMatrix, i, j: int): float =
     if j == A.ja[idx]:
       return A.aa[idx]
 
-proc setEntry*(A: var SparseMatrix, i, j: int, val: float) =
+proc getIndex*(A: SparseMatrix, i, j: int): int =
+  result = -1
   for idx in countup(A.ia[i], A.ia[i+1] - 1):
     if j == A.ja[idx]:
-      A.aa[idx] = val
+      return idx
+
+proc nonzero_bounds_row*(A: SparseMatrix, row: int): (int, int) =
+   result = (A.ia[row], A.ia[row+1] - 1)
 
 proc removeZeros(A: var SparseMatrix) =
   var row_end = 0

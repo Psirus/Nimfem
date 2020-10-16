@@ -20,13 +20,16 @@ def boundary(x, on_boundary):
 bc = DirichletBC(V, u_D, boundary)
 
 u = Function(V)
-solve(
-    a == L,
-    u,
-    bc,
-    solver_parameters={"linear_solver": "cg"},
-    form_compiler_parameters={"quadrature_degree": 2},
-)
+problem = LinearVariationalProblem(a, L, u, bc, form_compiler_parameters={"quadrature_degree": 2})
+solver = LinearVariationalSolver(problem)
+prms = solver.parameters
+prms["krylov_solver"]["monitor_convergence"] = False
+prms["krylov_solver"]["relative_tolerance"] = 1e-16
+prms["krylov_solver"]["absolute_tolerance"] = 1e-9
+prms["linear_solver"] = "cg"
+prms["preconditioner"] = "ilu"
+
+solver.solve()
 
 vtkfile = File("fenics_output.pvd")
 vtkfile << u

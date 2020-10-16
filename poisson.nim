@@ -25,7 +25,8 @@ var f = assembleVector(mySource, my_mesh)
 setDiagonalRows(A, my_mesh.boundary_nodes)
 applyBC(f, my_mesh, bc)
 
-var u = conjugate_gradient(A, f)
+var P = incomplete_lu(A)
+var u = preconditioned_cg(A, P, f)
 
 writeVTK(my_mesh, u)
 

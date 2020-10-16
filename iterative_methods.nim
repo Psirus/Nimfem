@@ -1,4 +1,3 @@
-import math
 import sparse
 
 proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
@@ -17,27 +16,68 @@ proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
     P = R + beta * P
     m += 1
     # echo "res = ", norm(R)
+  # echo m
 
-proc isNan(x: float): bool =
-  result = classify(x) == fcNan
-
+# Saad, Algorithm 10.3
 proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
   result = A
   for i in 1 ..< A.rows:
-    for k in 0 ..< i:
-      let entry = A.getEntry(i, k)
-      if not isNan(entry):
-        let e = entry / A.getEntry(k, k)
-        result.setEntry(i, k, e)
-        for j in k+1 .. A.rows:
-          let A_ij = A.getEntry(i, j)
-          let A_kj = A.getEntry(k, j)
-          if (not isNan(A_ij)) and (not isNan(A_kj)):
-            let A_ik = A.getEntry(i, k)
-            result.setEntry(i, j, A_ij - A_ik * A_kj)
+    let nz_bounds = result.nonzero_bounds_row(i)
+    for k_idx in nz_bounds[0] .. nz_bounds[1]:
+      let k = result.ja[k_idx]
+      if k >= i:
+        break
+      let e = result.aa[k_idx] / result.getEntry(k, k)
+      result.aa[k_idx] = e
+      for j_idx in nz_bounds[0] .. nz_bounds[1]:
+        let j = result.ja[j_idx]
+        if j < (k+1):
+          continue
+        let kj_idx = result.getIndex(k, j)
+        if kj_idx != -1:
+          result.aa[j_idx] -= e * result.aa[kj_idx]
 
 proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
+  assert b.len == P.cols, "Preconditioner and RHS vector don't match in size."
   result = b
-  # forward substitution
+  # forward substitution 
+  for i in 0 ..< P.rows:
+    var sum = 0.0
+    let nz_bounds = P.nonzero_bounds_row(i)
+    for j_idx in nz_bounds[0] .. nz_bounds[1]:
+      let j = P.ja[j_idx]
+      if j >= i:
+        break
+      sum += P.aa[j_idx] * result[j]
+    result[i] -= sum
 
   # backward substitution
+  for i in countdown(P.rows-1, 0):
+    var sum = 0.0
+    let nz_bounds = P.nonzero_bounds_row(i)
+    for j_idx in nz_bounds[0] .. nz_bounds[1]:
+      let j = P.ja[j_idx]
+      if j <= i:
+        continue
+      sum += P.aa[j_idx] * result[j]
+    result[i] = (result[i] - sum) / P.getEntry(i, i)
+
+proc preconditioned_cg*(A: SparseMatrix, C: SparseMatrix, b: DynamicVector): DynamicVector =
+  result = b
+  var R = b - A * result
+  var z = solve_ilu(C, R)
+  var P = z
+  var m = 0
+  let tol = 1e-9
+  while norm(R) > tol:
+    let Ap = A*P
+    let zR = dot(z, R)
+    let alpha = zR / dot(Ap, P)
+    result = result + alpha * P
+    R = R - alpha * Ap
+    z = solve_ilu(C, R)
+    let beta = dot(z, R) / zR
+    P = z + beta * P
+    m += 1
+    # echo "res = ", norm(R)
+  # echo m
