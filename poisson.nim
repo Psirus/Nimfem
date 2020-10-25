@@ -1,10 +1,4 @@
-import mesh
-import triangle
-import dense
-import assembly
-import sparse
-import iterative_methods
-import io
+import nimfem
 
 proc myF(x: Vector[2], J: Matrix[2, 2]): Matrix[3, 3] =
   let B = inv(J) * derivativeShapeFunctions()
