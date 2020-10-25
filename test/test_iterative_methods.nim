@@ -1,8 +1,8 @@
 import sequtils
 import fenv
 
-import ../sparse
-import ../iterative_methods
+import ../src/sparse
+import ../src/iterative_methods
 
 let eps = 2 * epsilon float
 

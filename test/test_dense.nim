@@ -1,4 +1,4 @@
-import ../dense
+import ../src/dense
 
 let a = [[1.0, 1.0, 1.0, 1.0],
           [2.0, 4.0, 8.0, 16.0],
