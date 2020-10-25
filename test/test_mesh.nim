@@ -1,4 +1,4 @@
-import ../mesh
+import ../src/mesh
 
 block:
   let mesh = UnitSquareMesh(3)
