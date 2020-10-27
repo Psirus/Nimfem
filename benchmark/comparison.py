@@ -5,8 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
-from plotstuff import PlottingContext
-
 elements = np.logspace(2, 7, 6)
 
 time_nim = []
@@ -15,7 +13,8 @@ time_fenics = []
 fenics_env = os.environ.copy()
 fenics_env["OMP_NUM_THREADS"] = "1"
 
-run = False
+os.makedirs("timings", exist_ok=True)
+run = True
 for n in [int(np.sqrt(n / 2)) for n in elements]:
     print(n)
 
@@ -46,7 +45,9 @@ for n in [int(np.sqrt(n / 2)) for n in elements]:
 time_nim = np.array(time_nim)
 time_fenics = np.array(time_fenics)
 plt.loglog(elements, time_nim, marker=".", label="Nimfem")
-plt.loglog(elements, time_fenics, marker=".", label="FEniCS w/ OMP_NUM_THREADS=1")
+plt.loglog(elements, time_fenics, marker=".", label="FEniCS")
 plt.legend()
+plt.xlabel("Number of Elements")
+plt.ylabel("Runtime [s]")
 
 plt.savefig("poisson_comparison.png")
