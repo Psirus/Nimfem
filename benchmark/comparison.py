@@ -49,5 +49,4 @@ plt.loglog(elements, time_nim, marker=".", label="Nimfem")
 plt.loglog(elements, time_fenics, marker=".", label="FEniCS w/ OMP_NUM_THREADS=1")
 plt.legend()
 
-print("Speedup: ", time_fenics/time_nim)
-plt.show()
+plt.savefig("poisson_comparison.png")
