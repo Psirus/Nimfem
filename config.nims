@@ -6,4 +6,5 @@ task test, "Run tests":
   let testDir = root / "test"
   if dirExists(testDir):
     for t in listFiles(testDir):
-      selfExec "c -r " & t
+      echo "Running " & t
+      selfExec "c -r --hints:off " & t
