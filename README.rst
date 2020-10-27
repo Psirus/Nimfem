@@ -14,6 +14,6 @@ Speed
 
 For now, Nimfem seems quite quick. This shows the runtime for different mesh sizes for the Poisson example:
 
-.. image:: https://github.com/Psirus/Nimfem/raw/speed_comparison.py/benchmark/poisson_comparison.png
+.. image:: https://github.com/Psirus/Nimfem/raw/master/benchmark/poisson_comparison.png
 
 To see what was done, or run this on your machine, see ``benchmark/comparison.py``.
