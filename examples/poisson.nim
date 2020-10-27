@@ -1,4 +1,4 @@
-import nimfem
+import ../nimfem
 
 proc myF(x: Vector[2], J: Matrix[2, 2]): Matrix[3, 3] =
   let B = inv(J) * derivativeShapeFunctions()
