@@ -14,6 +14,10 @@ type
     connectivity*: seq[array[element.num_nodes, int]]
     boundary_nodes*: seq[int]
 
+proc LagrangeLine*(order: int): Element =
+  result.num_nodes = order + 1
+  result.dim = 1
+
 proc LagrangeTriangle*(order: int): Element =
   result.num_nodes = (order + 2) * (order + 1) div 2
   result.dim = 2
@@ -39,6 +43,24 @@ proc UnitSquareMesh*(n: int): Mesh[LagrangeTriangle(1)] =
       result.connectivity.add([i + j*(n+1), i + (j+1)*(n+1), i + (j+1)*(n+1) + 1])
       result.connectivity.add([i + j*(n+1), i + (j+1)*(n+1) + 1, i + j*(n+1) + 1])
 
+proc UnitIntervalMesh*(n: int): Mesh[LagrangeLine(1)] =
+  result.nodes = newSeq[array[1, float]](n+1)
+  for i in 0..n:
+    let x = float(i) / float(n)
+    result.nodes[i] = [x]
+
+  result.boundary_nodes.add(0)
+  result.boundary_nodes.add(n)
+
+  result.connectivity = newSeqOfCap[array[2, int]](n)
+  for i in 0..<n:
+      result.connectivity.add([i, i+1])
+
+proc transform*(mesh: Mesh, f: proc (x: float): float): Mesh =
+  result = mesh
+  for node in result.nodes.mItems():
+    for i in 0..<node.len:
+      node[i] = f(node[i])
 
 proc readDolfinXml*(element: static[Element], filename: string): Mesh[element] =
   let xml_contents = loadXml(filename)

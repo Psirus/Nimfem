@@ -11,6 +11,15 @@ block:
   doAssert mesh.connectivity == @[[0, 2, 3], [0, 3, 1]]
 
 block:
+  let mesh = UnitIntervalMesh(5)
+  doAssert mesh.nodes.len == 6
+  doAssert mesh.connectivity.len == 5
+
+  let mesh2 = transform(mesh, proc (x: float): float = 2*x)
+  doAssert mesh2.nodes == @[[0.0], [0.4], [0.8], [1.2], [1.6], [2.0]]
+
+
+block:
   let mesh = readDolfinXml(LagrangeTriangle(1), "test/data/ell_2d.xml")
 
   doAssert mesh.nodes.len == 26
