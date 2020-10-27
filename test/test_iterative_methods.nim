@@ -72,7 +72,6 @@ block:
   let reference_ilu = toCSR(Ai, Aj, ILUx)
 
   let computed_ilu = incomplete_lu(A)
-  echo computed_ilu
 
   doAssert reference_ilu.ia == computed_ilu.ia
   doAssert reference_ilu.ja == computed_ilu.ja

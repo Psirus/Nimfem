@@ -11,7 +11,7 @@ block:
   doAssert mesh.connectivity == @[[0, 2, 3], [0, 3, 1]]
 
 block:
-  let mesh = readDolfinXml(2, 3, "data/ell_2d.xml")
+  let mesh = readDolfinXml(2, 3, "test/data/ell_2d.xml")
 
   doAssert mesh.nodes.len == 26
   doAssert mesh.nodes[17][0] == 0.49609
@@ -21,7 +21,7 @@ block:
   doAssert mesh.connectivity[7] == [8, 18, 7]
 
 block:
-  let mesh = readDolfinXml(3, 4, "data/beam.xml")
+  let mesh = readDolfinXml(3, 4, "test/data/beam.xml")
 
   doAssert mesh.nodes.len == 176
   doAssert mesh.nodes[17][0] == 6.0e-1

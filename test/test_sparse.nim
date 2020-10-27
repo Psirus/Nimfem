@@ -1,6 +1,3 @@
-import strutils
-import math
-
 import ../src/sparse
 
 block:
