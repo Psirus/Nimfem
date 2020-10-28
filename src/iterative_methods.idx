@@ -1,0 +1,3 @@
+conjugate_gradient	src/iterative_methods.html#conjugate_gradient,SparseMatrix,DynamicVector	iterative_methods: conjugate_gradient(A: SparseMatrix; b: DynamicVector): DynamicVector	
+incomplete_lu	src/iterative_methods.html#incomplete_lu,SparseMatrix	iterative_methods: incomplete_lu(A: SparseMatrix): SparseMatrix	
+preconditioned_cg	src/iterative_methods.html#preconditioned_cg,SparseMatrix,SparseMatrix,DynamicVector	iterative_methods: preconditioned_cg(A: SparseMatrix; C: SparseMatrix; b: DynamicVector): DynamicVector	

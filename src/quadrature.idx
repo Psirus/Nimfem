@@ -1,0 +1,2 @@
+triSecondOrderQuadrature	src/quadrature.html#triSecondOrderQuadrature,proc(Vector[D],Matrix[D,D]),array[N,array[D,float]]	quadrature: triSecondOrderQuadrature[N, D](f: proc (x: Vector[D]; J: Matrix[D, D]): Matrix[\n    N, N]; nodes: array[N, array[D, float]]): Matrix[N, N]	
+triSecondOrderQuadratureVec	src/quadrature.html#triSecondOrderQuadratureVec,proc(Vector[D],Matrix[D,D]),array[N,array[D,float]]	quadrature: triSecondOrderQuadratureVec[N, D](f: proc (x: Vector[D]; J: Matrix[D, D]): Vector[\n    N]; nodes: array[N, array[D, float]]): Vector[N]	

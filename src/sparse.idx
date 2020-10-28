@@ -1,0 +1,18 @@
+SparseMatrix	src/sparse.html#SparseMatrix	sparse: SparseMatrix	
+DynamicVector	src/sparse.html#DynamicVector	sparse: DynamicVector	
+newVector	src/sparse.html#newVector,int	sparse: newVector(size: int): DynamicVector	
+size	src/sparse.html#size,DynamicVector	sparse: size(vector: DynamicVector): int	
+`+`	src/sparse.html#+,DynamicVector,DynamicVector	sparse: `+`(a, b: DynamicVector): DynamicVector	
+`*`	src/sparse.html#*,float,DynamicVector	sparse: `*`(a: float; b: DynamicVector): DynamicVector	
+`-`	src/sparse.html#-,DynamicVector,DynamicVector	sparse: `-`(a, b: DynamicVector): DynamicVector	
+dot	src/sparse.html#dot,DynamicVector,DynamicVector	sparse: dot(a, b: DynamicVector): float	
+norm	src/sparse.html#norm,DynamicVector	sparse: norm(a: DynamicVector): float	
+setDiagonalRows	src/sparse.html#setDiagonalRows,SparseMatrix,seq[int]	sparse: setDiagonalRows(A: var SparseMatrix; rows: seq[int])	
+`*`	src/sparse.html#*,SparseMatrix,DynamicVector	sparse: `*`(A: SparseMatrix; b: DynamicVector): DynamicVector	
+rows	src/sparse.html#rows,SparseMatrix	sparse: rows(A: SparseMatrix): int	
+cols	src/sparse.html#cols,SparseMatrix	sparse: cols(A: SparseMatrix): int	
+`$`	src/sparse.html#$,SparseMatrix	sparse: `$`(A: SparseMatrix): string	
+getEntry	src/sparse.html#getEntry,SparseMatrix,int,int	sparse: getEntry(A: SparseMatrix; i, j: int): float	
+getIndex	src/sparse.html#getIndex,SparseMatrix,int,int	sparse: getIndex(A: SparseMatrix; i, j: int): int	
+nonzero_bounds_row	src/sparse.html#nonzero_bounds_row,SparseMatrix,int	sparse: nonzero_bounds_row(A: SparseMatrix; row: int): (int, int)	
+toCSR	src/sparse.html#toCSR,seq[int],seq[int],seq[float]	sparse: toCSR(Ai, Aj: seq[int]; Ax: seq[float]): SparseMatrix	

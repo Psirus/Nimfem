@@ -1,0 +1,3 @@
+shapeFunctions	src/triangle.html#shapeFunctions,Vector[]	triangle: shapeFunctions(x: Vector[2]): Vector[3]	
+derivativeShapeFunctions	src/triangle.html#derivativeShapeFunctions	triangle: derivativeShapeFunctions(): Matrix[2, 3]	
+jacobian	src/triangle.html#jacobian,array[,array[,float]]	triangle: jacobian(nodes: array[3, array[2, float]]): Matrix[2, 2]	

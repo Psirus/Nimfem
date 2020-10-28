@@ -1,0 +1,18 @@
+Matrix	src/dense.html#Matrix	dense: Matrix	
+Vector	src/dense.html#Vector	dense: Vector	
+`$`	src/dense.html#$,Matrix	dense: `$`(matrix: Matrix): string	
+rows	src/dense.html#rows,Matrix	dense: rows(matrix: Matrix): int	
+cols	src/dense.html#cols,Matrix	dense: cols(matrix: Matrix): int	
+shape	src/dense.html#shape,Matrix	dense: shape(matrix: Matrix): (int, int)	
+`[]`	src/dense.html#[],Matrix,int,int	dense: `[]`(matrix: Matrix; row, col: int): float	
+`[]=`	src/dense.html#[]=,Matrix,int,int,float	dense: `[]=`(matrix: var Matrix; row, col: int; value: float)	
+transpose	src/dense.html#transpose,Matrix[M,N]	dense: transpose[M, N](matrix: Matrix[M, N]): Matrix[N, M]	
+`+`	src/dense.html#+,Matrix,Matrix	dense: `+`(a, b: Matrix): Matrix	
+`+`	src/dense.html#+,Vector[N],Vector[N]	dense: `+`[N](a, b: Vector[N]): Vector[N]	
+`-`	src/dense.html#-,Vector[N],Vector[N]	dense: `-`[N](a, b: Vector[N]): Vector[N]	
+`*`	src/dense.html#*,Matrix[M,N],Vector[N]	dense: `*`[M, N](A: Matrix[M, N]; b: Vector[N]): Vector[M]	
+`*`	src/dense.html#*,Matrix[M,P],Matrix[P,N]	dense: `*`[M, P, N](a: Matrix[M, P]; b: Matrix[P, N]): Matrix[M, N]	
+`*`	src/dense.html#*,Matrix,float	dense: `*`(a: Matrix; b: float): Matrix	
+`*`	src/dense.html#*,float,Vector[N]	dense: `*`[N](a: float; b: Vector[N]): Vector[N]	
+determinant	src/dense.html#determinant,Matrix[,]	dense: determinant(a: Matrix[2, 2]): float	
+inv	src/dense.html#inv,Matrix[,]	dense: inv(a: Matrix[2, 2]): Matrix[2, 2]	

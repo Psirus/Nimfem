@@ -1,0 +1,3 @@
+assembleMatrix	src/assembly.html#assembleMatrix,proc(Vector[D],Matrix[D,D]),Mesh	assembly: assembleMatrix[M, N, D](f: proc (x: Vector[D]; J: Matrix[D, D]): Matrix[M, N];\n                        mesh: Mesh): SparseMatrix	
+assembleVector	src/assembly.html#assembleVector,proc(Vector[D],Matrix[D,D]),Mesh	assembly: assembleVector[N, D](f: proc (x: Vector[D]; J: Matrix[D, D]): Vector[N];\n                     mesh: Mesh): DynamicVector	
+applyBC	src/assembly.html#applyBC,DynamicVector,Mesh,proc(Vector[])	assembly: applyBC(f: var DynamicVector; mesh: Mesh; bc: proc (x: Vector[2]): float)	
