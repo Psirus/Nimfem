@@ -22,6 +22,6 @@ applyBC(f, my_mesh, bc)
 var P = incomplete_lu(A)
 var u = preconditioned_cg(A, P, f)
 
-writeVTK(my_mesh, u)
+writeVTK("output.vtk", my_mesh, u)
 
 echo "Number of elements: ", my_mesh.connectivity.len

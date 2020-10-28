@@ -9,7 +9,7 @@ proc num_nodes*(e: Element): int = e.num_nodes
 proc dim*(e: Element): int = e.dim
 
 type
-  Mesh*[element: static[Element]]  = object
+  Mesh*[element: static[Element]] = object
     nodes*: seq[array[element.dim, float]]
     connectivity*: seq[array[element.num_nodes, int]]
     boundary_nodes*: seq[int]
@@ -26,8 +26,9 @@ proc LagrangeTetrahedron*(order: int): Element =
   result.num_nodes = (order + 3) * (order + 2) * (order + 1) div 6
   result.dim = 3
 
-# division means number of elements per edge of the unit square
 proc UnitSquareMesh*(n: int): Mesh[LagrangeTriangle(1)] =
+  ## Create a triangle mesh of a unit square.
+  ## n is the number of elements per edge.
   result.nodes = newSeq[array[2, float]]((n + 1)^2)
   for i in 0..n:
     for j in 0..n:
@@ -44,6 +45,8 @@ proc UnitSquareMesh*(n: int): Mesh[LagrangeTriangle(1)] =
       result.connectivity.add([i + j*(n+1), i + (j+1)*(n+1) + 1, i + j*(n+1) + 1])
 
 proc UnitIntervalMesh*(n: int): Mesh[LagrangeLine(1)] =
+  ## Create a mesh of a unit interval.
+  ## n is the number of elements.
   result.nodes = newSeq[array[1, float]](n+1)
   for i in 0..n:
     let x = float(i) / float(n)
@@ -54,15 +57,18 @@ proc UnitIntervalMesh*(n: int): Mesh[LagrangeLine(1)] =
 
   result.connectivity = newSeqOfCap[array[2, int]](n)
   for i in 0..<n:
-      result.connectivity.add([i, i+1])
+    result.connectivity.add([i, i+1])
 
 proc transform*(mesh: Mesh, f: proc (x: float): float): Mesh =
+  ## Transform a 1D mesh using a function `f`.
   result = mesh
   for node in result.nodes.mItems():
     for i in 0..<node.len:
       node[i] = f(node[i])
 
 proc readDolfinXml*(element: static[Element], filename: string): Mesh[element] =
+  ## Read in Dolfin XML meshes from `filename`.
+  ## For compile-time optimizations, the elementtype of the resulting mesh is required as `element`.
   let xml_contents = loadXml(filename)
   let mesh_element = child(xml_contents, "mesh")
 

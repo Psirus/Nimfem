@@ -5,6 +5,7 @@ import triangle
 # TODO: try sugar syntax
 proc triSecondOrderQuadrature*[N, D](f: proc(x: Vector[D], J: Matrix[D, D]):
     Matrix[N, N], nodes: array[N, array[D, float]]): Matrix[N, N] =
+  ## Integrate matrix function `f` over a triangle.
   let weights = [1.0/3.0, 1.0/3.0, 1.0/3.0]
   let gauss_points = [[1.0/6.0, 1.0/6.0], [2.0/3.0, 1.0/6.0], [1.0/6.0, 2.0/3.0]]
   let J = jacobian(nodes)
@@ -14,6 +15,7 @@ proc triSecondOrderQuadrature*[N, D](f: proc(x: Vector[D], J: Matrix[D, D]):
 
 proc triSecondOrderQuadratureVec*[N, D](f: proc(x: Vector[D], J: Matrix[D, D]):
     Vector[N], nodes: array[N, array[D, float]]): Vector[N] =
+  ## Integrate vector function `f` over a triangle.
   let weights = [1.0/3.0, 1.0/3.0, 1.0/3.0]
   let gauss_points = [[1.0/6.0, 1.0/6.0], [2.0/3.0, 1.0/6.0], [1.0/6.0, 2.0/3.0]]
   let J = jacobian(nodes)

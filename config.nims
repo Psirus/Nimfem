@@ -8,3 +8,8 @@ task test, "Run tests":
     for t in listFiles(testDir):
       echo "Running " & t
       selfExec "c -r --hints:off " & t
+
+# TODO: create documentation
+# nim doc --project --index:on --git.url:https://github.com/Psirus/Nimfem --git.commit:master --outdir:htmldocs nimfem.nim
+# cp htmldocs/nimfem.html htmldocs/index.html
+# ghp-import htmldocs -b gh-pages -p

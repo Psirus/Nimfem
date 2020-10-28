@@ -1,3 +1,5 @@
+## .. include:: README.rst
+
 import src/dense
 export Vector, Matrix, inv, `*`, transpose
 

@@ -6,7 +6,7 @@ import ../src/iterative_methods
 
 let eps = 2 * epsilon float
 
-proc allClose(a, b: DynamicVector, atol=eps, rtol=eps): bool =
+proc allClose(a, b: DynamicVector, atol = eps, rtol = eps): bool =
   var tmp = newSeq[bool](a.size)
   for i in 0..<a.size:
     tmp[i] = abs(a[i] - b[i]) <= (atol + rtol * abs(b[i]))

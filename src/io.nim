@@ -3,8 +3,9 @@ import strformat
 import mesh
 import sparse
 
-proc writeVTK*(mesh: Mesh, u: DynamicVector) =
-  var vtkFile = open("output.vtk", FileMode.fmWrite)
+proc writeVTK*(filename: string, mesh: Mesh, u: DynamicVector) =
+  ## Write VTK output to `filename`.
+  var vtkFile = open(filename, FileMode.fmWrite)
   # Header
   vtkFile.write("# vtk DataFile Version 1.0\n")
   vtkFile.write("Nimfem output\n")

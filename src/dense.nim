@@ -30,6 +30,7 @@ proc `[]=`*(matrix: var Matrix, row, col: int, value: float) =
   matrix[row][col] = value
 
 proc transpose*[M, N](matrix: Matrix[M, N]): Matrix[N, M] =
+  ## Compute the transpose of `matrix`.
   for i in 0 ..< result.rows:
     for j in 0 ..< result.cols:
       result[i, j] = matrix[j, i]
@@ -72,9 +73,11 @@ proc `*`*[N](a: float, b: Vector[N]): Vector[N] =
     result[i] = a * b[i]
 
 proc determinant*(a: Matrix[2, 2]): float =
+  ## Compute the determinant of a 2x2 matrix `a`.
   result = a[0, 0] * a[1, 1] - a[0, 1] * a[1, 0]
 
 proc inv*(a: Matrix[2, 2]): Matrix[2, 2] =
+  ## Compute the inverse of a 2x2 matrix `a`.
   result = [[a[1, 1], -a[0, 1]],
             [-a[1, 0], a[0, 0]]]
   result = result * (1.0/determinant(a))

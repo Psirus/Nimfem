@@ -1,6 +1,7 @@
 import sparse
 
 proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
+  ## Compute solution of Ax = b using the conjugate gradient method.
   result = b
   var R = b - A * result
   var P = R
@@ -20,6 +21,7 @@ proc conjugate_gradient*(A: SparseMatrix, b: DynamicVector): DynamicVector =
 
 # Saad, Algorithm 10.3
 proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
+  ## Compute the incomplete LU factorization of `A`.
   result = A
   for i in 1 ..< A.rows:
     let nz_bounds = result.nonzero_bounds_row(i)
@@ -40,7 +42,7 @@ proc incomplete_lu*(A: SparseMatrix): SparseMatrix =
 proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
   assert b.len == P.cols, "Preconditioner and RHS vector don't match in size."
   result = b
-  # forward substitution 
+  # forward substitution
   for i in 0 ..< P.rows:
     var sum = 0.0
     let nz_bounds = P.nonzero_bounds_row(i)
@@ -63,6 +65,8 @@ proc solve_ilu*(P: SparseMatrix, b: DynamicVector): DynamicVector =
     result[i] = (result[i] - sum) / P.getEntry(i, i)
 
 proc preconditioned_cg*(A: SparseMatrix, C: SparseMatrix, b: DynamicVector): DynamicVector =
+  ## Compute the solution of Ax = b using a preconditioned conjugate gradient method.
+  ## Supply a precondioner via `C`.
   result = b
   var R = b - A * result
   var z = solve_ilu(C, R)

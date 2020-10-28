@@ -37,11 +37,13 @@ proc `-`*(a, b: DynamicVector): DynamicVector =
     result[i] = a[i] - b[i]
 
 proc dot*(a, b: DynamicVector): float =
+  ## Dot product of two vectors `a` and `b`.
   assert a.size == b.size
   for i in 0 ..< a.size:
     result += a[i] * b[i]
 
 proc norm*(a: DynamicVector): float =
+  ## Compute the norm of `a`.
   result = sqrt(dot(a, a))
 
 proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
@@ -97,7 +99,7 @@ proc getIndex*(A: SparseMatrix, i, j: int): int =
       return idx
 
 proc nonzero_bounds_row*(A: SparseMatrix, row: int): (int, int) =
-   result = (A.ia[row], A.ia[row+1] - 1)
+  result = (A.ia[row], A.ia[row+1] - 1)
 
 proc removeZeros(A: var SparseMatrix) =
   var row_end = 0
@@ -161,6 +163,7 @@ proc cumSum(xs: var seq[int]) =
     xs[i] += xs[i-1]
 
 proc toCSR*(Ai, Aj: seq[int], Ax: seq[float]): SparseMatrix =
+  ## Convert triplet list format into CSR matrix.
   let n_rows = max(Ai) + 1
   result.ia = newSeq[int](n_rows + 1)
   for row in Ai:
