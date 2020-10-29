@@ -1,4 +1,5 @@
 from os import `/`
+from strutils import endsWith
 
 let root = projectDir()
 
@@ -6,8 +7,9 @@ task test, "Run tests":
   let testDir = root / "test"
   if dirExists(testDir):
     for t in listFiles(testDir):
-      echo "Running " & t
-      selfExec "c -r --hints:off " & t
+      if t.endsWith(".nim"):
+        echo "Running " & t
+        selfExec "c -r --hints:off " & t
 
 # TODO: create documentation
 # nim doc --project --index:on --git.url:https://github.com/Psirus/Nimfem --git.commit:master --outdir:htmldocs nimfem.nim
