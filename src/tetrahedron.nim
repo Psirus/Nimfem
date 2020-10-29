@@ -34,16 +34,16 @@ proc kelvinStrain*(invJ: Matrix[3, 3]): Matrix[6, 12] =
   let scalarB = invJ * derivativeShapeFunctions()
   for i in 0..3:
     # σ_11, σ_22, σ_33 (or ε_ii)
-    result[0, i] = scalarB[0, i]
-    result[1, 3*i] = scalarB[1, i]
-    result[2, i] = scalarB[2, i]
+    result[0, 3*i]   = scalarB[0, i]
+    result[1, 3*i+1] = scalarB[1, i]
+    result[2, 3*i+2] = scalarB[2, i]
 
     # σ_23, σ_13, σ_12 (or ε_ij)
-    result[3, i] = a * scalarB[1, i]
-    result[3, i+3] = a * scalarB[0, i]
+    result[3, 3*i+1] = a * scalarB[2, i]
+    result[3, 3*i+2] = a * scalarB[1, i]
 
-    result[4, i+3] = a * scalarB[2, i]
-    result[4, i+6] = a * scalarB[1, i]
+    result[4, 3*i]   = a * scalarB[2, i]
+    result[4, 3*i+2] = a * scalarB[0, i]
 
-    result[5, i] = a * scalarB[2, i]
-    result[5, i+6] = a * scalarB[0, i]
+    result[5, 3*i]   = a * scalarB[1, i]
+    result[5, 3*i+1] = a * scalarB[0, i]

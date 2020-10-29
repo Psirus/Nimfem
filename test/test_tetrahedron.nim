@@ -24,3 +24,19 @@ block:
                [0.0, 0.0, 1.5]]
   let J = jacobian(nodes)
   doAssert determinant(J) == 3.0
+
+block:
+  let nodes = [[0.0, 0.0, 0.0],
+               [1.0, 0.0, 0.0],
+               [0.0, 1.0, 0.0],
+               [0.0, 0.0, 1.0]]
+  let invJ = inv(jacobian(nodes))
+  let B = kelvinStrain(invJ)
+
+  var u = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  var strain = B*u
+  doAssert strain == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  u = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]
+  strain = B*u
+  doAssert strain == [0.0, 1.0, 0.0, 0.0, 0.0, 0.0]

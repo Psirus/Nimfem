@@ -86,4 +86,22 @@ proc inv*(a: Matrix[2, 2]): Matrix[2, 2] =
   ## Compute the inverse of a 2x2 matrix `a`.
   result = [[a[1, 1], -a[0, 1]],
             [-a[1, 0], a[0, 0]]]
-  result = result * (1.0/determinant(a))
+  result = result * (1.0 / determinant(a))
+
+proc inv*(a: Matrix[3, 3]): Matrix[3, 3] =
+  ## Compute the inverse of a 3x3 matrix `a`.
+  let A = a[1, 1] * a[2, 2] - a[1, 2] * a[2, 1]
+  let B = a[1, 2] * a[2, 0] - a[1, 0] * a[2, 2]
+  let C = a[1, 0] * a[2, 1] - a[1, 1] * a[2, 0]
+
+  let D = a[0, 2] * a[2, 1] - a[0, 1] * a[2, 2]
+  let E = a[0, 0] * a[2, 2] - a[0, 2] * a[2, 0]
+  let F = a[0, 1] * a[2, 0] - a[0, 0] * a[2, 1]
+
+  let G = a[0, 1] * a[1, 2] - a[0, 2] * a[1, 1]
+  let H = a[0, 2] * a[1, 0] - a[0, 0] * a[1, 2]
+  let I = a[0, 0] * a[1, 1] - a[0, 1] * a[1, 0]
+
+  result = [[A, D, G],
+            [B, E, H],
+            [C, F, I]] * (1.0 / determinant(a))
