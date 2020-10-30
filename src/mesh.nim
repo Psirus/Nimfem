@@ -1,12 +1,17 @@
 import math, xmlparser, xmltree, strutils
 
 type
+  CellShape* = enum
+    line, triangle, tetrahedron
+
   Element = object
+    shape: CellShape
     num_nodes: int
     dim: int
 
 proc num_nodes*(e: Element): int = e.num_nodes
 proc dim*(e: Element): int = e.dim
+proc shape*(e: Element): CellShape = e.shape
 
 type
   Mesh*[element: static[Element]] = object
@@ -17,14 +22,17 @@ type
 proc LagrangeLine*(order: int): Element =
   result.num_nodes = order + 1
   result.dim = 1
+  result.shape = line
 
 proc LagrangeTriangle*(order: int): Element =
   result.num_nodes = (order + 2) * (order + 1) div 2
   result.dim = 2
+  result.shape = triangle
 
 proc LagrangeTetrahedron*(order: int): Element =
   result.num_nodes = (order + 3) * (order + 2) * (order + 1) div 6
   result.dim = 3
+  result.shape = tetrahedron
 
 proc UnitSquareMesh*(n: int): Mesh[LagrangeTriangle(1)] =
   ## Create a triangle mesh of a unit square.
