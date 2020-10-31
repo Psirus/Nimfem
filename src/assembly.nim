@@ -20,12 +20,13 @@ proc assembleMatrix*[N, D, Element](f: proc(x: Vector[D], J: Matrix[D, D]):
       let elem_matrix = triSecondOrderQuadrature(f, localNodes)
     elif Element.shape == tetrahedron:
       let elem_matrix = tetSecondOrderQuadrature(f, localNodes)
+    #echo dense.`$`(elem_matrix)
     for i, dof_i in elem.pairs:
       for j, dof_j in elem.pairs:
         for ii in 0..<num_dofs:
           for jj in 0..<num_dofs:
             Ai.add(num_dofs*dof_i+ii)
-            Aj.add(num_dofs*dof_j+ii)
+            Aj.add(num_dofs*dof_j+jj)
             Ax.add(elem_matrix[i+ii, j+jj])
 
   result = toCSR(Ai, Aj, Ax)
@@ -46,7 +47,7 @@ proc assembleVector*[N, D, Element](f: proc(x: Vector[D], J: Matrix[D, D]): Vect
       let elem_vec = tetSecondOrderQuadratureVec(f, localNodes)
     for i, dof_i in elem.pairs:
       for ii in 0..<num_dofs:
-        result[num_dofs*dof_i + ii] += elem_vec[i+ii]
+        result[num_dofs*dof_i + ii] += elem_vec[num_dofs*i+ii]
 
 proc applyBC*(f: var DynamicVector, mesh: Mesh, bc: proc(x: Vector[3]): Vector[3], boundary_nodes: seq[int]) =
   ## Apply the boundary condition `bc` to the global vector `f` at all boundary nodes.

@@ -33,6 +33,9 @@ block:
   let invJ = inv(jacobian(nodes))
   let B = kelvinStrain(invJ)
 
+  echo dense.`$`(B)
+
+
   var u = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   var strain = B*u
   doAssert strain == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]

@@ -9,7 +9,7 @@ proc shapeFunctions*(x: Vector[3]): Vector[4] =
   result = [1.0 - x[0] - x[1] - x[2], x[0], x[1], x[2]]
 
 proc derivativeShapeFunctions*(): Matrix[3, 4] =
-  ## First derivative of the shapefunctions.
+  ## First derivative of the shapefunctions ∂N_j/∂ξ_i
   result = [[-1.0, 1.0, 0.0, 0.0],
             [-1.0, 0.0, 1.0, 0.0],
             [-1.0, 0.0, 0.0, 1.0]]
@@ -23,7 +23,7 @@ proc jacobian*(nodes: array[4, array[3, float]]): Matrix[3, 3] =
 
 proc vectorShapeFunctions*(x: Vector[3]): Matrix[3, 12] =
   let scalarShapeFunctions = shapeFunctions(x)
-  for i in 0 .. 2:
+  for i in 0 .. 3:
     result[0, 3*i] = scalarShapeFunctions[i]
     result[1, 3*i+1] = scalarShapeFunctions[i]
     result[2, 3*i+2] = scalarShapeFunctions[i]

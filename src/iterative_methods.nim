@@ -83,5 +83,5 @@ proc preconditioned_cg*(A: SparseMatrix, C: SparseMatrix, b: DynamicVector): Dyn
     let beta = dot(z, R) / zR
     P = z + beta * P
     m += 1
-    # echo "res = ", norm(R)
+    echo m, ", res = ", norm(R)
   # echo m

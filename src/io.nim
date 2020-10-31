@@ -50,6 +50,5 @@ proc writeVTK*[Element](filename: string, mesh: Mesh[Element], u: DynamicVector)
   # vector data
   vtkFile.write("POINT_DATA {num_nodes}\n".fmt)
   vtkFile.write("VECTORS u float\n")
-  vtkFile.write("LOOKUP_TABLE default\n")
   for i in countup(0, u.len-1, 3):
     vtkFile.write("{u[i]} {u[i+1]} {u[i+2]}\n".fmt)

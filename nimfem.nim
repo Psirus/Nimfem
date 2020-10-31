@@ -10,7 +10,7 @@ import src/triangle
 export shapeFunctions, derivativeShapeFunctions
 
 import src/tetrahedron
-export shapeFunctions, kelvinStrain, vectorShapeFunctions
+export shapeFunctions, kelvinStrain, vectorShapeFunctions, jacobian
 
 import src/assembly
 export assembleVector, assembleMatrix, applyBC

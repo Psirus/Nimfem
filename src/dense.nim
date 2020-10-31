@@ -79,7 +79,7 @@ proc determinant*(a: Matrix[2, 2]): float =
 proc determinant*(a: Matrix[3, 3]): float =
   ## Compute the determinant of a 3x3 matrix `a`.
   result = a[0, 0] * a[1, 1] * a[2, 2] + a[0, 1] * a[1, 2] * a[2, 0] + a[0, 2] *
-      a[1, 0] * a[2, 1] - a[0, 2] * a[1, 0] * a[2, 1] - a[0, 1] * a[1, 0] * a[2,
+      a[1, 0] * a[2, 1] - a[0, 2] * a[1, 1] * a[2, 0] - a[0, 1] * a[1, 0] * a[2,
       2] - a[0, 0] * a[1, 2] * a[2, 1]
 
 proc inv*(a: Matrix[2, 2]): Matrix[2, 2] =
