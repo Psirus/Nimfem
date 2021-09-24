@@ -46,16 +46,6 @@ proc norm*(a: DynamicVector): float =
   ## Compute the norm of `a`.
   result = sqrt(dot(a, a))
 
-proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
-  for row in rows:
-    let nnz_in_row = A.ia[row+1] - A.ia[row]
-    let lower = A.ia[row]
-    let upper = A.ia[row] + nnz_in_row - 1
-    for idx in lower .. upper:
-      if row == A.ja[idx]:
-        A.aa[idx] = 1.0
-      else:
-        A.aa[idx] = 0.0
 
 proc `*`*(A: SparseMatrix, b: DynamicVector): DynamicVector =
   result = newVector(b.size)
@@ -121,6 +111,19 @@ proc removeZeros(A: var SparseMatrix) =
     A.ja.delete(nnz, A.ja.high)
     A.aa.delete(nnz, A.aa.high)
 
+proc setDiagonalRows*(A: var SparseMatrix, rows: seq[int]) =
+  for row in rows:
+    let nnz_in_row = A.ia[row+1] - A.ia[row]
+    let lower = A.ia[row]
+    let upper = A.ia[row] + nnz_in_row - 1
+    for idx in lower .. upper:
+      if row == A.ja[idx]:
+        A.aa[idx] = 1.0
+      else:
+        A.aa[idx] = 0.0
+
+  removeZeros(A)
+
 proc sortCols(A: var SparseMatrix) =
   for i in 0..<A.ia.high:
     let row_start = A.ia[i]
@@ -164,6 +167,8 @@ proc cumSum(xs: var seq[int]) =
 
 proc toCSR*(Ai, Aj: seq[int], Ax: seq[float]): SparseMatrix =
   ## Convert triplet list format into CSR matrix.
+  assert(Ai.len == Aj.len)
+  assert(Aj.len == Ax.len)
   let n_rows = max(Ai) + 1
   result.ia = newSeq[int](n_rows + 1)
   for row in Ai:

@@ -1,3 +1,4 @@
+import unittest
 import sequtils
 import fenv
 
@@ -12,34 +13,33 @@ proc allClose(a, b: Vector, atol = eps, rtol = eps): bool =
     tmp[i] = abs(a[i] - b[i]) <= (atol + rtol * abs(b[i]))
   result = all(tmp, proc (x: bool): bool = return x)
 
-block:
-  let x = [0.0, 0.0, 0.0]
-  let N = shapeFunctions(x)
-  doAssert allClose(N, [1.0, 0.0, 0.0, 0.0])
+suite "Tetrahedron":
 
-block:
-  let nodes = [[0.0, 0.0, 0.0],
-               [2.0, 0.0, 0.0],
-               [0.0, 1.0, 0.0],
-               [0.0, 0.0, 1.5]]
-  let J = jacobian(nodes)
-  doAssert determinant(J) == 3.0
+  test "Shape functions":
+    let x = [0.0, 0.0, 0.0]
+    let N = shapeFunctions(x)
+    require allClose(N, [1.0, 0.0, 0.0, 0.0])
 
-block:
-  let nodes = [[0.0, 0.0, 0.0],
-               [1.0, 0.0, 0.0],
-               [0.0, 1.0, 0.0],
-               [0.0, 0.0, 1.0]]
-  let invJ = inv(jacobian(nodes))
-  let B = kelvinStrain(invJ)
+  test "Jacobian":
+    let nodes = [[0.0, 0.0, 0.0],
+                [2.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, 0.0, 1.5]]
+    let J = jacobian(nodes)
+    require determinant(J) == 3.0
 
-  echo dense.`$`(B)
+  test "Kelvin strain":
+    let nodes = [[0.0, 0.0, 0.0],
+                [1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [0.0, 0.0, 1.0]]
+    let invJ = inv(jacobian(nodes))
+    let B = kelvinStrain(invJ)
 
+    var u = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    var strain = B*u
+    require strain == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-  var u = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  var strain = B*u
-  doAssert strain == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-  u = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]
-  strain = B*u
-  doAssert strain == [0.0, 1.0, 0.0, 0.0, 0.0, 0.0]
+    u = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]
+    strain = B*u
+    require strain == [0.0, 1.0, 0.0, 0.0, 0.0, 0.0]
